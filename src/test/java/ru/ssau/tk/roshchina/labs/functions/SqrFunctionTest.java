@@ -1,8 +1,11 @@
 package ru.ssau.tk.roshchina.labs.functions;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SqrFunctionTest {
+    @Test
     public void testSqr() {
         SqrFunction sqrFunction = new SqrFunction();
         assertEquals(0.0, sqrFunction.apply(0), 0.0001);
