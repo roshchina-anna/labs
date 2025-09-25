@@ -1,7 +1,10 @@
 package ru.ssau.tk.roshchina.labs.functions;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 class IdentityFunctionTest {
+    @Test
     void testApply() {
         IdentityFunction identityFunction = new IdentityFunction();
         assertEquals(0.0, identityFunction.apply(0.0), 0.0001);
