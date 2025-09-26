@@ -8,17 +8,6 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     private final int count;
 
     public ArrayTabulatedFunction(double[] xArray, double[] yArray) {
-        if (xArray.length != yArray.length) {
-            throw new IllegalArgumentException("Arrays must have the same length");
-        }
-        if (xArray.length < 2) {
-            throw new IllegalArgumentException("Array length must be at least 2");
-        }
-        for (int i = 1; i < xArray.length; i++) {
-            if (xArray[i] <= xArray[i - 1]) {
-                throw new IllegalArgumentException("xValues must be strictly increasing");
-            }
-        }
         this.count = xArray.length;
         this.xArray = Arrays.copyOf(xArray, count);
         this.yArray = Arrays.copyOf(yArray, count);
