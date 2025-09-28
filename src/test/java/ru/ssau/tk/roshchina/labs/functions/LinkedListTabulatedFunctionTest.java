@@ -126,4 +126,98 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(14.0, function.apply(4.0), 1e-10);   // x=4: линейная экстраполяция
         assertEquals(19.0, function.apply(5.0), 1e-10);   // x=5: линейная экстраполяция
     }
+    @Test
+    void testTwoLinkedListFunctionsComposition() {
+        //f(x) = x + 1
+        double[] xValues1 = {0.0, 1.0, 2.0, 3.0};
+        double[] yValues1 = {1.0, 2.0, 3.0, 4.0};
+        LinkedListTabulatedFunction func1 = new LinkedListTabulatedFunction(xValues1, yValues1);
+
+        //g(x) = x * 2
+        double[] xValues2 = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues2 = {2.0, 4.0, 6.0, 8.0};
+        LinkedListTabulatedFunction func2 = new LinkedListTabulatedFunction(xValues2, yValues2);
+
+        CompositeFunction composition = new CompositeFunction(func1, func2);
+
+        assertEquals(2.0, composition.apply(0.0), 1e-10);
+        assertEquals(4.0, composition.apply(1.0), 1e-10);
+        assertEquals(6.0, composition.apply(2.0), 1e-10);
+        assertEquals(5.0, composition.apply(1.5), 1e-10);
+    }
+    @Test
+    void testLinkedListWithSimpleFunctionComposition() {
+        //f(x) = x^2
+        double[] xValues = {0.0, 1.0, 2.0, 3.0};
+        double[] yValues = {0.0, 1.0, 4.0, 9.0};
+        LinkedListTabulatedFunction linkedListFunc = new LinkedListTabulatedFunction(xValues, yValues);
+
+        //g(x) = sin(x)
+        MathFunction sinFunction = Math::sin;
+        CompositeFunction sinOfSquare = new CompositeFunction(linkedListFunc, sinFunction);
+
+        assertEquals(Math.sin(0.0), sinOfSquare.apply(0.0), 1e-10);     // sin(0)
+        assertEquals(Math.sin(1.0), sinOfSquare.apply(1.0), 1e-10);     // sin(1)
+        assertEquals(Math.sin(4.0), sinOfSquare.apply(2.0), 1e-10);     // sin(4)
+        assertEquals(Math.sin(2.25), sinOfSquare.apply(1.5), 1e-10);    // sin(2.25) - интерполяция
+    }
+    @Test
+    void testLinkedListExtrapolationInComposition() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {1.0, 4.0, 9.0}; // x²
+        LinkedListTabulatedFunction squareFunc = new LinkedListTabulatedFunction(xValues, yValues);
+
+        //g(x) = sqrt(x)
+        MathFunction sqrtFunction = Math::sqrt;
+
+        CompositeFunction absFunction = new CompositeFunction(squareFunc, sqrtFunction);
+
+        assertEquals(0.0, absFunction.apply(0.0), 1e-10);   // √(0²) = 0 (экстраполяция слева)
+        assertEquals(4.0, absFunction.apply(4.0), 1e-10);   // √(4²) = 4 (экстраполяция справа)
+    }
+    @Test
+    void testMultipleLinkedListCompositions() {
+        // f(x) = 2x
+        double[] xValues1 = {0.0, 1.0, 2.0};
+        double[] yValues1 = {0.0, 2.0, 4.0};
+        LinkedListTabulatedFunction doubleFunc = new LinkedListTabulatedFunction(xValues1, yValues1);
+
+        // g(x) = x + 3
+        double[] xValues2 = {0.0, 2.0, 4.0};
+        double[] yValues2 = {3.0, 5.0, 7.0};
+        LinkedListTabulatedFunction incrementFunc = new LinkedListTabulatedFunction(xValues2, yValues2);
+
+        // h(x) = x^2
+        double[] xValues3 = {3.0, 5.0, 7.0};
+        double[] yValues3 = {9.0, 25.0, 49.0};
+        LinkedListTabulatedFunction squareFunc = new LinkedListTabulatedFunction(xValues3, yValues3);
+
+        CompositeFunction level1 = new CompositeFunction(doubleFunc, incrementFunc);
+        CompositeFunction level2 = new CompositeFunction(level1, squareFunc);
+
+        assertEquals(9.0, level2.apply(0.0), 1e-10);    // (2*0 + 3)² = 9
+        assertEquals(25.0, level2.apply(1.0), 1e-10);   // (2*1 + 3)² = 25
+        assertEquals(49.0, level2.apply(2.0), 1e-10);   // (2*2 + 3)² = 49
+        assertEquals(36.0, level2.apply(1.5), 1e-10);   // (2*1.5 + 3)² = 36 (интерполяция)
+    }
+    @Test
+    void testComplexInterpolationChain() {
+        double[] xValues = {0.0, 0.5, 1.5, 3.0};
+        double[] yValues = {0.0, 0.25, 2.25, 9.0}; // x²
+        LinkedListTabulatedFunction irregularFunc = new LinkedListTabulatedFunction(xValues, yValues);
+
+        double[] xValues2 = {0.0, 2.25, 9.0};
+        double[] yValues2 = {0.0, 1.5, 3.0}; // √x
+        ArrayTabulatedFunction sqrtFunc = new ArrayTabulatedFunction(xValues2, yValues2);
+
+        CompositeFunction composition = new CompositeFunction(irregularFunc, sqrtFunc);
+
+        // Тестируем сложную интерполяцию через несколько уровней
+        assertEquals(0.0, composition.apply(0.0), 1e-10);
+        assertEquals(0.5, composition.apply(0.5), 1e-10);
+        assertEquals(1.0, composition.apply(1.0), 1e-10);   // Интерполяция в irregularFunc + интерполяция в sqrtFunc
+        assertEquals(1.5, composition.apply(1.5), 1e-10);
+        assertEquals(2.0, composition.apply(2.0), 1e-10);   // Интерполяция в irregularFunc + интерполяция в sqrtFunc
+    }
+
 }
