@@ -310,4 +310,70 @@ class ArrayTabulatedFunctionTest {
         assertEquals(0.0,fine.getY(0));
         assertEquals(30.0,fine.getY(5));
     }
+    @Test
+    void testInsertUpdateExistingValue() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues = {1.0, 4.0, 9.0, 16.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        function.insert(2.0, 8.0);
+
+        assertEquals(4, function.getCount()); // Количество не должно измениться
+        assertEquals(8.0, function.getY(1), 1e-10); // Значение обновилось
+        assertEquals(1.0, function.getY(0), 1e-10); // Другие значения остались прежними
+        assertEquals(9.0, function.getY(2), 1e-10);
+        assertEquals(16.0, function.getY(3), 1e-10);
+    }
+    @Test
+    void testInsertAtBeginning() {
+        double[] xValues = {2.0, 3.0, 4.0};
+        double[] yValues = {4.0, 9.0, 16.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        function.insert(1.0, 1.0);
+
+        assertEquals(4, function.getCount());
+        assertEquals(1.0, function.leftBound(), 1e-10); // Левая граница изменилась
+        assertEquals(1.0, function.getX(0), 1e-10); // Новый элемент на позиции 0
+        assertEquals(1.0, function.getY(0), 1e-10);
+        assertEquals(2.0, function.getX(1), 1e-10); // Старые элементы сдвинулись
+        assertEquals(4.0, function.getY(1), 1e-10);
+    }
+    @Test
+    void testInsertAtEnd() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {1.0, 4.0, 9.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        function.insert(4.0, 16.0);
+
+        assertEquals(4, function.getCount());
+        assertEquals(4.0, function.rightBound(), 1e-10); // Правая граница изменилась
+        assertEquals(4.0, function.getX(3), 1e-10); // Новый элемент на последней позиции
+        assertEquals(16.0, function.getY(3), 1e-10);
+        assertEquals(3.0, function.getX(2), 1e-10); // Предыдущий последний элемент сдвинулся
+        assertEquals(9.0, function.getY(2), 1e-10);
+    }
+    @Test
+    void testInsertInMiddle() {
+        double[] xValues = {1.0, 3.0, 5.0};
+        double[] yValues = {1.0, 9.0, 25.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        function.insert(2.0, 4.0);
+        function.insert(4.0, 16.0);
+
+        assertEquals(5, function.getCount());
+
+        assertEquals(1.0, function.getX(0), 1e-10);
+        assertEquals(2.0, function.getX(1), 1e-10);
+        assertEquals(3.0, function.getX(2), 1e-10);
+        assertEquals(4.0, function.getX(3), 1e-10);
+        assertEquals(5.0, function.getX(4), 1e-10);
+
+        assertEquals(1.0, function.getY(0), 1e-10);
+        assertEquals(4.0, function.getY(1), 1e-10);
+        assertEquals(9.0, function.getY(2), 1e-10);
+        assertEquals(16.0, function.getY(3), 1e-10);
+        assertEquals(25.0, function.getY(4), 1e-10);
+    }
 }

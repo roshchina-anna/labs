@@ -2,10 +2,10 @@ package ru.ssau.tk.roshchina.labs.functions;
 
 import java.util.Arrays;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
-    private final double[] xArray;
-    private final double[] yArray;
-    private final int count;
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable {
+    private double[] xArray;
+    private double[] yArray;
+    private int count;
 
     public ArrayTabulatedFunction(double[] xArray, double[] yArray) {
         this.count = xArray.length;
@@ -114,5 +114,32 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         }
         return interpolate(x, getX(floorIndex), getX(floorIndex+1), getY(floorIndex), getY(floorIndex+1));
     }
+    @Override
+    public void insert(double x, double y) {
+        for (int i = 0; i < count; i++) {
+            if (xArray[i] == x) {
+                yArray[i] = y;
+                return;
+            }
+        }
+        int insertIndex = 0;
+        while (insertIndex < count && xArray[insertIndex] < x) {
+            insertIndex++;
+        }
+        double[] newXValues = new double[count + 1];
+        double[] newYValues = new double[count + 1];
 
+        System.arraycopy(xArray, 0, newXValues, 0, insertIndex);
+        System.arraycopy(yArray, 0, newYValues, 0, insertIndex);
+
+        newXValues[insertIndex] = x;
+        newYValues[insertIndex] = y;
+
+        System.arraycopy(xArray, insertIndex, newXValues, insertIndex + 1, count - insertIndex);
+        System.arraycopy(yArray, insertIndex, newYValues, insertIndex + 1, count - insertIndex);
+
+        xArray = newXValues;
+        yArray = newYValues;
+        count++;
+    }
 }
