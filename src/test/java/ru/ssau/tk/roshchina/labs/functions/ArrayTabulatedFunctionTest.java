@@ -376,4 +376,48 @@ class ArrayTabulatedFunctionTest {
         assertEquals(16.0, function.getY(3), 1e-10);
         assertEquals(25.0, function.getY(4), 1e-10);
     }
+    @Test
+    void testRemoveFromMiddle() {
+        double[] xArray = {1.0, 2.0, 3.0, 4.0};
+        double[] yArray = {1.0, 4.0, 9.0, 16.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xArray, yArray);
+
+        function.remove(1);
+
+        assertEquals(3, function.getCount());
+        assertEquals(1.0, function.getX(0), 1e-12);
+        assertEquals(3.0, function.getX(1), 1e-12);
+        assertEquals(4.0, function.getX(2), 1e-12);
+        assertEquals(9.0, function.getY(1), 1e-12);
+        assertEquals(1.0, function.leftBound(), 1e-12);
+        assertEquals(4.0, function.rightBound(), 1e-12);
+    }
+    @Test
+    void testRemoveFromBeginning() {
+        double[] xArray = {1.0, 2.0, 3.0, 4.0};
+        double[] yArray = {1.0, 4.0, 9.0, 16.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xArray, yArray);
+
+        function.remove(0);
+
+        assertEquals(3, function.getCount());
+        assertEquals(2.0, function.getX(0), 1e-12);
+        assertEquals(3.0, function.getX(1), 1e-12);
+        assertEquals(4.0, function.getX(2), 1e-12);
+        assertEquals(2.0, function.leftBound(), 1e-12);
+    }
+    @Test
+    void testRemoveFromEnd() {
+        double[] xArray = {1.0, 2.0, 3.0, 4.0};
+        double[] yArray = {1.0, 4.0, 9.0, 16.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xArray, yArray);
+
+        function.remove(3);
+
+        assertEquals(3, function.getCount());
+        assertEquals(1.0, function.getX(0), 1e-12);
+        assertEquals(2.0, function.getX(1), 1e-12);
+        assertEquals(3.0, function.getX(2), 1e-12);
+        assertEquals(3.0, function.rightBound(), 1e-12);
+    }
 }

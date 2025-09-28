@@ -2,7 +2,7 @@ package ru.ssau.tk.roshchina.labs.functions;
 
 import java.util.Arrays;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable {
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private double[] xArray;
     private double[] yArray;
     private int count;
@@ -142,4 +142,19 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         yArray = newYValues;
         count++;
     }
+    @Override
+    public void remove(int index) {
+        double[] newXArray = new double[count - 1];
+        double[] newYArray = new double[count - 1];
+
+        System.arraycopy(xArray, 0, newXArray, 0, index);
+        System.arraycopy(yArray, 0, newYArray, 0, index);
+
+        System.arraycopy(xArray, index + 1, newXArray, index, count - index - 1);
+        System.arraycopy(yArray, index + 1, newYArray, index, count - index - 1);
+        this.xArray = newXArray;
+        this.yArray = newYArray;
+        this.count--;
+    }
+
 }
