@@ -90,7 +90,7 @@ class LinkedListTabulatedFunctionTest {
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         assertEquals(0, function.indexOfY(10.0));
-        assertEquals(1, function.indexOfY(20.0)); // Первое вхождение
+        assertEquals(1, function.indexOfY(20.0));
         assertEquals(2, function.indexOfY(30.0));
         assertEquals(-1, function.indexOfY(40.0));
     }
@@ -101,8 +101,8 @@ class LinkedListTabulatedFunctionTest {
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         // Интерполяция
-        assertEquals(0.5, function.apply(0.5), 1e-10);  // Между 0 и 1
-        assertEquals(2.5, function.apply(1.5), 1e-10);  // Между 1 и 2
+        assertEquals(0.5, function.apply(0.5), 1e-10);
+        assertEquals(2.5, function.apply(1.5), 1e-10);
     }
 
     @Test
@@ -112,8 +112,8 @@ class LinkedListTabulatedFunctionTest {
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         // Экстраполяция слева
-        assertEquals(-2.0, function.apply(0.0), 1e-10);   // x=0: линейная экстраполяция
-        assertEquals(-5.0, function.apply(-1.0), 1e-10);  // x=-1: линейная экстраполяция
+        assertEquals(-2.0, function.apply(0.0), 1e-10);
+        assertEquals(-5.0, function.apply(-1.0), 1e-10);
     }
 
     @Test
@@ -123,8 +123,8 @@ class LinkedListTabulatedFunctionTest {
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         // Экстраполяция справа
-        assertEquals(14.0, function.apply(4.0), 1e-10);   // x=4: линейная экстраполяция
-        assertEquals(19.0, function.apply(5.0), 1e-10);   // x=5: линейная экстраполяция
+        assertEquals(14.0, function.apply(4.0), 1e-10);
+        assertEquals(19.0, function.apply(5.0), 1e-10);
     }
     @Test
     void testTwoLinkedListFunctionsComposition() {
@@ -156,10 +156,10 @@ class LinkedListTabulatedFunctionTest {
         MathFunction sinFunction = Math::sin;
         CompositeFunction sinOfSquare = new CompositeFunction(linkedListFunc, sinFunction);
 
-        assertEquals(Math.sin(0.0), sinOfSquare.apply(0.0), 1e-10);     // sin(0)
-        assertEquals(Math.sin(1.0), sinOfSquare.apply(1.0), 1e-10);     // sin(1)
-        assertEquals(Math.sin(4.0), sinOfSquare.apply(2.0), 1e-10);     // sin(4)
-        assertEquals(Math.sin(2.25), sinOfSquare.apply(1.5), 1e-10);    // sin(2.25) - интерполяция
+        assertEquals(Math.sin(0.0), sinOfSquare.apply(0.0), 1e-10);
+        assertEquals(Math.sin(1.0), sinOfSquare.apply(1.0), 1e-10);
+        assertEquals(Math.sin(4.0), sinOfSquare.apply(2.0), 1e-10);
+        assertEquals(Math.sin(2.25), sinOfSquare.apply(1.5), 1e-10);
     }
     @Test
     void testLinkedListExtrapolationInComposition() {
@@ -172,8 +172,8 @@ class LinkedListTabulatedFunctionTest {
 
         CompositeFunction absFunction = new CompositeFunction(squareFunc, sqrtFunction);
 
-        assertEquals(0.0, absFunction.apply(0.0), 1e-10);   // √(0²) = 0 (экстраполяция слева)
-        assertEquals(4.0, absFunction.apply(4.0), 1e-10);   // √(4²) = 4 (экстраполяция справа)
+        assertEquals(0.0, absFunction.apply(0.0), 1e-10);
+        assertEquals(4.0, absFunction.apply(4.0), 1e-10);
     }
     @Test
     void testMultipleLinkedListCompositions() {
@@ -195,10 +195,10 @@ class LinkedListTabulatedFunctionTest {
         CompositeFunction level1 = new CompositeFunction(doubleFunc, incrementFunc);
         CompositeFunction level2 = new CompositeFunction(level1, squareFunc);
 
-        assertEquals(9.0, level2.apply(0.0), 1e-10);    // (2*0 + 3)² = 9
-        assertEquals(25.0, level2.apply(1.0), 1e-10);   // (2*1 + 3)² = 25
-        assertEquals(49.0, level2.apply(2.0), 1e-10);   // (2*2 + 3)² = 49
-        assertEquals(36.0, level2.apply(1.5), 1e-10);   // (2*1.5 + 3)² = 36 (интерполяция)
+        assertEquals(9.0, level2.apply(0.0), 1e-10);
+        assertEquals(25.0, level2.apply(1.0), 1e-10);
+        assertEquals(49.0, level2.apply(2.0), 1e-10);
+        assertEquals(36.0, level2.apply(1.5), 1e-10);
     }
     @Test
     void testComplexInterpolationChain() {
@@ -215,9 +215,9 @@ class LinkedListTabulatedFunctionTest {
         // Тестируем сложную интерполяцию через несколько уровней
         assertEquals(0.0, composition.apply(0.0), 1e-10);
         assertEquals(0.5, composition.apply(0.5), 1e-10);
-        assertEquals(1.0, composition.apply(1.0), 1e-10);   // Интерполяция в irregularFunc + интерполяция в sqrtFunc
+        assertEquals(1.0, composition.apply(1.0), 1e-10);
         assertEquals(1.5, composition.apply(1.5), 1e-10);
-        assertEquals(2.0, composition.apply(2.0), 1e-10);   // Интерполяция в irregularFunc + интерполяция в sqrtFunc
+        assertEquals(2.0, composition.apply(2.0), 1e-10);
     }
 
 }
