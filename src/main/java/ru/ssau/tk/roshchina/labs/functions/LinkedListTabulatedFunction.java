@@ -1,5 +1,4 @@
 package ru.ssau.tk.roshchina.labs.functions;
-import java.util.Arrays;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     private static class Node {
