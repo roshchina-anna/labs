@@ -114,4 +114,5 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         }
         return interpolate(x, getX(floorIndex), getX(floorIndex+1), getY(floorIndex), getY(floorIndex+1));
     }
+
 }
