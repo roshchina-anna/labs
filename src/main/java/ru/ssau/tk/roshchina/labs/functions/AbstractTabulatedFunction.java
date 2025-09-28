@@ -1,12 +1,14 @@
 package ru.ssau.tk.roshchina.labs.functions;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
-
-    protected abstract int indexMaxX(double x);
+    protected abstract int  floorIndexOfX(double x);
     protected abstract double extrapolateLeft(double x);
     protected abstract double extrapolateRight(double x);
     protected abstract double interpolate(double x, int indexLeft);
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) {
+        if (leftX == rightX){
+            throw new IllegalArgumentException ("The left and right boundaries of the interval cannot be the same");
+        }
         return leftY + (rightY - leftY) * (x - leftX) / (rightX - leftX);
     }
     @Override
@@ -17,11 +19,11 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
         if (x > rightBound()) {
             return extrapolateRight(x);
         }
-        int index = indexMaxX(x);
+        int index =  floorIndexOfX(x);
         if (index != -1) {
             return getY(index);
         } else {
-            int indexLeft = indexMaxX(x);
+            int indexLeft =  floorIndexOfX(x);
             return interpolate(x, indexLeft);
         }
     }
