@@ -1,15 +1,15 @@
 package ru.ssau.tk.roshchina.labs.functions;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private static class Node {
         public double x;
         public double y;
         public Node next;
         public Node prev;
-         public Node(double x, double y) {
+        public Node(double x, double y) {
              this.x = x;
              this.y = y;
-         }
+        }
     }
     private Node head;
     protected int count;
@@ -145,6 +145,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         }
         return interpolate(x, getX(floorIndex), getX(floorIndex+1), getY(floorIndex), getY(floorIndex+1));
     }
+    @Override
     protected int floorIndexOfX(double x) {
         if (x < getX(0)) return 0;
         if (x > getX(count - 1))return count;
@@ -162,6 +163,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         }
         return right;
     }
+    @Override
     public void insert(double x, double y) {
         if (head == null) {
             addNode(x, y);
@@ -205,5 +207,23 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         last.next = newNode;
         head.prev = newNode;
         count++;
+    }
+    @Override
+    public void remove(int index) {
+        if (count == 1) {
+            head = null;
+            count = 0;
+            return;
+        }
+        Node nodeToRemove = getNode(index);
+        if (nodeToRemove == head) {
+            head = head.next;
+        }
+        nodeToRemove.prev.next = nodeToRemove.next;
+        nodeToRemove.next.prev = nodeToRemove.prev;
+        count--;
+        if (count == 0) {
+            head = null;
+        }
     }
 }

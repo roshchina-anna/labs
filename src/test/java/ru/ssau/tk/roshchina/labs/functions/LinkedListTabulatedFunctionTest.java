@@ -276,4 +276,50 @@ class LinkedListTabulatedFunctionTest {
         function.insert(1.5, 3.0);
         assertEquals(3, function.getCount());
     }
+    @Test
+    void testRemoveFromBeginning() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues = {1.0, 4.0, 9.0, 16.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+        function.remove(0);
+
+        assertEquals(3, function.getCount());
+        assertEquals(2.0, function.leftBound(), 1e-10); // Новая левая граница
+        assertEquals(2.0, function.getX(0), 1e-10);
+        assertEquals(4.0, function.getY(0), 1e-10);
+        assertEquals(3.0, function.getX(1), 1e-10);
+        assertEquals(9.0, function.getY(1), 1e-10);
+    }
+    @Test
+    void testRemoveFromEnd() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues = {1.0, 4.0, 9.0, 16.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+        function.remove(3);
+
+        assertEquals(3, function.getCount());
+        assertEquals(3.0, function.rightBound(), 1e-10); // Новая правая граница
+        assertEquals(1.0, function.getX(0), 1e-10);
+        assertEquals(1.0, function.getY(0), 1e-10);
+        assertEquals(3.0, function.getX(2), 1e-10);
+        assertEquals(9.0, function.getY(2), 1e-10);
+    }
+    @Test
+    void testRemoveFromMiddle() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0};
+        double[] yValues = {1.0, 4.0, 9.0, 16.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+        function.remove(1);
+
+        assertEquals(3, function.getCount());
+        assertEquals(1.0, function.getX(0), 1e-10);
+        assertEquals(1.0, function.getY(0), 1e-10);
+        assertEquals(3.0, function.getX(1), 1e-10); // Элемент сдвинулся
+        assertEquals(9.0, function.getY(1), 1e-10);
+        assertEquals(4.0, function.getX(2), 1e-10);
+        assertEquals(16.0, function.getY(2), 1e-10);
+    }
 }
