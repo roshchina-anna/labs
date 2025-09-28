@@ -28,7 +28,7 @@ class CompositeFunctionTest {
     }
 
     @Test
-    void testTripleComposition() {
+    void testTripleComposition() { //(x^2)^2
         MathFunction identity = new IdentityFunction();
         MathFunction square = new SqrFunction();
 
@@ -67,7 +67,7 @@ class CompositeFunctionTest {
     @Test
     void testCompositionWithLambdaFunctions() {
         MathFunction increment = x -> x + 1;
-        MathFunction doubleValue = x -> x * 2;
+        MathFunction doubleValue = x -> x * 2; //(x+1)*2
         CompositeFunction composite = new CompositeFunction(increment, doubleValue);
 
         assertEquals(2.0, composite.apply(0.0), 0.0000000001);
