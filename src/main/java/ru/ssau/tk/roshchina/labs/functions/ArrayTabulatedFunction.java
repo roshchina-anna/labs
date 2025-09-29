@@ -17,15 +17,19 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         this.xArray = new double[count];
         this.yArray = new double[count];
         if (xFrom > xTo) {
+            //меняем местами начальную точку и конечную
             double temp = xFrom;
             xFrom = xTo;
             xTo = temp;
         }
         if (xFrom == xTo) {
+            //заполняем все х одним значением
             Arrays.fill(xArray, xFrom);
             double yArrays = source.apply(xFrom);
+            //заполняем все у одним значением
             Arrays.fill(yArray, yArrays);
         } else {
+            //иначе выполняем дискретизацию
             double step = (xTo - xFrom) / (count - 1);
             for (int i = 0; i < count; i++) {
                 xArray[i] = xFrom + i * step;
@@ -76,13 +80,14 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         return getX(count - 1);
     }
     @Override
-    protected int floorIndexOfX(double x) {
+    protected int floorIndexOfX(double x) { //поиск левой границы для интервала х
         if (x < getX(0)) return 0;
         if (x > getX(count - 1))return count;
+        //бинарный поиск интервала
         int left = 0;
         int right = count - 1;
         while (left <= right) {
-            int mid = left + (right - left) / 2;
+            int mid = left + (right - left) / 2; //находим средний индекс
             if (getX(mid) == x) {
                 return mid;
             } else if (getX(mid) < x){
@@ -144,15 +149,18 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     }
     @Override
     public void remove(int index) {
+        //новые массивы уменьшенного размера
         double[] newXArray = new double[count - 1];
         double[] newYArray = new double[count - 1];
 
+        //копирует левую часть до удаляемого элемента
         System.arraycopy(xArray, 0, newXArray, 0, index);
         System.arraycopy(yArray, 0, newYArray, 0, index);
 
+        //копирует правую часть до удаляемого элемента
         System.arraycopy(xArray, index + 1, newXArray, index, count - index - 1);
         System.arraycopy(yArray, index + 1, newYArray, index, count - index - 1);
-        this.xArray = newXArray;
+        this.xArray = newXArray; //заменяет старые массивы на новые
         this.yArray = newYArray;
         this.count--;
     }

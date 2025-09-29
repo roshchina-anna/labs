@@ -12,6 +12,7 @@ public class SplineFunction implements MathFunction {
                 throw new IllegalArgumentException("xArray must be strictly increasing");
             }
         }
+        //создание копий массивов
         this.xArray = xArray.clone();
         this.yArray = yArray.clone();
     }
@@ -20,11 +21,14 @@ public class SplineFunction implements MathFunction {
         for (int i = 0; i < xArray.length - 1; i++) {
             if (x <= xArray[i + 1]) {
                 if (x < xArray[i] && i == 0) {
+                    //экстаполяция влево, если х лежит слева от первого узла
                     return interpolate(xArray[0], xArray[1], yArray[0], yArray[1], x);
                 }
+                //интерполяция внутри найденного интервала
                 return interpolate(xArray[i], xArray[i + 1], yArray[i], yArray[i + 1], x);
             }
         }
+        //интерполяция вправо, если х лежит справа от последнего узла
         return interpolate(
                 xArray[xArray.length - 2],
                 xArray[xArray.length - 1],
@@ -33,6 +37,7 @@ public class SplineFunction implements MathFunction {
                 x
         );
     }
+    //выполнение линейной интерполяции между двумя точками
     private double interpolate(double x1, double x2, double y1, double y2, double x) {
         return y1 + (y2 - y1) * (x - x1) / (x2 - x1);
     }

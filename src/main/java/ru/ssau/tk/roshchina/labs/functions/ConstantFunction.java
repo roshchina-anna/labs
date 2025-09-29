@@ -7,9 +7,10 @@ public class ConstantFunction implements MathFunction {
     }
     @Override
     public double apply(double x) {
-        return constant;
+        return constant; //возвращает константу, игнорирует x
     }
+    //геттер для получения значения константы
     public double getConstant() {
-        return constant;
+        return constant; //возвращает сохраненное значение
     }
 }
