@@ -116,29 +116,29 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     }
     @Override
     public void insert(double x, double y) {
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) { //поиск х
             if (xArray[i] == x) {
-                yArray[i] = y;
+                yArray[i] = y; //замена значения
                 return;
             }
         }
-        int insertIndex = 0;
+        int insertIndex = 0; //поиск позиции для вставки
         while (insertIndex < count && xArray[insertIndex] < x) {
             insertIndex++;
         }
-        double[] newXValues = new double[count + 1];
+        double[] newXValues = new double[count + 1]; //создание увеличенных массивов
         double[] newYValues = new double[count + 1];
 
-        System.arraycopy(xArray, 0, newXValues, 0, insertIndex);
+        System.arraycopy(xArray, 0, newXValues, 0, insertIndex); //копирование эл-тов до позиции вставки
         System.arraycopy(yArray, 0, newYValues, 0, insertIndex);
 
-        newXValues[insertIndex] = x;
+        newXValues[insertIndex] = x; //втавка нового элемента
         newYValues[insertIndex] = y;
 
-        System.arraycopy(xArray, insertIndex, newXValues, insertIndex + 1, count - insertIndex);
+        System.arraycopy(xArray, insertIndex, newXValues, insertIndex + 1, count - insertIndex); //копирование эл-тов после поиции вставки
         System.arraycopy(yArray, insertIndex, newYValues, insertIndex + 1, count - insertIndex);
 
-        xArray = newXValues;
+        xArray = newXValues; //замена старых массивов
         yArray = newYValues;
         count++;
     }

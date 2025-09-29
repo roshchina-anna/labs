@@ -1,10 +1,10 @@
 package ru.ssau.tk.roshchina.labs.functions;
 
 public class CompositeFunction implements MathFunction {
-    private final MathFunction firstFunction;
-    private final MathFunction secondFunction;
+    private final MathFunction firstFunction; //первая функция
+    private final MathFunction secondFunction; //вторая функция
 
-    public CompositeFunction (MathFunction firstFunction, MathFunction secondFunction) {
+    public CompositeFunction (MathFunction firstFunction, MathFunction secondFunction) { //конструктор
         this.firstFunction = firstFunction;
         this.secondFunction = secondFunction;
     }
@@ -13,10 +13,10 @@ public class CompositeFunction implements MathFunction {
         double intermediateRes = firstFunction.apply(x);
         return secondFunction.apply(x);
     }
+    //геттеры
     public MathFunction getFirstFunction() {
         return firstFunction;
     }
-
     public MathFunction getSecondFunction() {
         return secondFunction;
     }

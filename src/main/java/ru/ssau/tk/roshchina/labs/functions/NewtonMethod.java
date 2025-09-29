@@ -1,17 +1,16 @@
 package ru.ssau.tk.roshchina.labs.functions;
 
-public class NewtonMethod implements MathFunction{
+public class NewtonMethod implements MathFunction{ //метод Ньютона
     private final MathFunction function;
     private final MathFunction derivative;
     private final double accuracy;
     private final int maxIterations;
 
-    public NewtonMethod(MathFunction function, MathFunction derivative,
-                        double accuracy, int maxIterations) {
-        this.function = function;
-        this.derivative = derivative;
-        this.accuracy = accuracy;
-        this.maxIterations = maxIterations;
+    public NewtonMethod(MathFunction function, MathFunction derivative, double accuracy, int maxIterations) { //констурктор
+        this.function = function; //функция
+        this.derivative = derivative; //производная
+        this.accuracy = accuracy; //точность
+        this.maxIterations = maxIterations; //макс. кол-во итераций
     }
 
     public NewtonMethod(MathFunction function, MathFunction derivative) {
@@ -23,7 +22,7 @@ public class NewtonMethod implements MathFunction{
         return findRoot(x);
     }
 
-    public double findRoot(double initialApproximation) {
+    public double findRoot(double initialApproximation) { //метод для нахождения корня уравнения
         double x = initialApproximation;
         for (int i = 0; i < maxIterations; i++) {
             double fx = function.apply(x);

@@ -53,13 +53,12 @@ class NewtonMethodTest {
 
     @Test
     void testTrigonometricEquation() {
-        // Решаем sin(x) = 0 → x = 0, π, 2π, ...
         MathFunction sinFunction = Math::sin;
         MathFunction derivative = Math::cos;
 
         NewtonMethod newton = new NewtonMethod(sinFunction, derivative);
 
-        double root = newton.findRoot(3.0); // Начальное приближение near π
+        double root = newton.findRoot(3.0);
         assertEquals(Math.PI, root, 0.00000001);
     }
 

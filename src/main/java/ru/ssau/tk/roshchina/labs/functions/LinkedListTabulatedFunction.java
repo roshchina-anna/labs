@@ -1,21 +1,21 @@
 package ru.ssau.tk.roshchina.labs.functions;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
-    private static class Node {
+    private static class Node { //вспомогательный класс
         public double x;
         public double y;
         public Node next;
         public Node prev;
-        public Node(double x, double y) {
+        public Node(double x, double y) { //конструктор
              this.x = x;
              this.y = y;
         }
     }
     private Node head;
     protected int count;
-    private void addNode(double x, double y) {
+    private void addNode(double x, double y) { //метод для добавления узла в конец списка
         Node newNode = new Node(x, y);
-        if (head == null) {
+        if (head == null) { //если список пустой
             head = newNode;
             head.next = head;
             head.prev = head;
@@ -29,7 +29,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
         count ++;
     }
-    private Node getNode(int index) {
+    private Node getNode(int index) { //метод для получения узла по индексу
         if (index < 0 || index >= count) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + count);
         }
@@ -47,12 +47,12 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
         return current;
     }
-    public LinkedListTabulatedFunction(double [] xValues, double [] yValues) {
+    public LinkedListTabulatedFunction(double [] xValues, double [] yValues) { //конструктор из массивов
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
         }
     }
-    public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+    public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) { // конструктор: дискретизация
         if (xFrom > xTo) {
             double temp = xFrom;
             xFrom = xTo;
@@ -125,21 +125,21 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return -1;
     }
     @Override
-    protected double extrapolateLeft(double x) {
+    protected double extrapolateLeft(double x) { //экстраполяция слева (x<leftBound)
         if (count == 1) {
             return getY(0);
         }
         return interpolate(x, getX(0), getX(1), getY(0), getY(1));
     }
     @Override
-    protected double extrapolateRight(double x) {
+    protected double extrapolateRight(double x) { //экстраполяция справа (x>rightBound)
         if (count == 1) {
             return getY(0);
         }
         return interpolate(x, getX(count - 2), getX(count - 1), getY(count - 2), getY(count - 1));
     }
     @Override
-    protected double interpolate(double x, int floorIndex) {
+    protected double interpolate(double x, int floorIndex) { //интерполяция (x между двух точек)
         if (count == 1) {
             return getY(0);
         }
@@ -209,20 +209,20 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         count++;
     }
     @Override
-    public void remove(int index) {
-        if (count == 1) {
+    public void remove(int index) { //метод для удаления узлов
+        if (count == 1) { //если в списке один узел
             head = null;
             count = 0;
             return;
         }
         Node nodeToRemove = getNode(index);
-        if (nodeToRemove == head) {
+        if (nodeToRemove == head) { //если удаляем голову
             head = head.next;
         }
-        nodeToRemove.prev.next = nodeToRemove.next;
+        nodeToRemove.prev.next = nodeToRemove.next; //переписываем узлы
         nodeToRemove.next.prev = nodeToRemove.prev;
         count--;
-        if (count == 0) {
+        if (count == 0) { //если список стал пустым
             head = null;
         }
     }
