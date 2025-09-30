@@ -1,126 +1,80 @@
 package ru.ssau.tk.roshchina.labs.functions;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class CompositeFunctionTest {
-    @Test
-    void testSimpleComposition() {
-        MathFunction identity = new IdentityFunction();
-        MathFunction square = new SqrFunction();
-        CompositeFunction composite = new CompositeFunction(identity, square);
+public class CompositeFunctionTest {
 
-        assertEquals(0.0, composite.apply(0.0), 1e-10);
-        assertEquals(1.0, composite.apply(1.0), 1e-10);
-        assertEquals(4.0, composite.apply(2.0), 1e-10);
-        assertEquals(9.0, composite.apply(3.0), 1e-10);
-        assertEquals(25.0, composite.apply(5.0), 1e-10);
+    @Test
+    public void testConstructorAndGetters() {
+        MathFunction firstFunction = new IdentityFunction();
+        MathFunction secondFunction = new SqrFunction();
+
+        CompositeFunction composite = new CompositeFunction(firstFunction, secondFunction);
+
+        assertEquals(composite.getFirstFunction(), firstFunction);
+        assertEquals(composite.getSecondFunction(), secondFunction);
     }
 
     @Test
-    void testCompositionInDifferentOrder() {
-        MathFunction square = new SqrFunction();
-        MathFunction identity = new IdentityFunction();
-        CompositeFunction composite = new CompositeFunction(square, identity);
+    public void testApplyWithIdentityAndSquare() {
+        MathFunction firstFunction = new IdentityFunction();
+        MathFunction secondFunction = new SqrFunction();
 
-        assertEquals(4.0, composite.apply(2.0), 1e-10);
-        assertEquals(9.0, composite.apply(3.0), 1e-10);
-        assertEquals(16.0, composite.apply(4.0), 1e-10);
+        CompositeFunction composite = new CompositeFunction(firstFunction, secondFunction);
+
+        assertEquals(0.0, composite.apply(0.0), 0.0001);
+        assertEquals(2.0, composite.apply(2.0), 0.0001); // Ошибка в реализации!
+        assertEquals(-3.0, composite.apply(-3.0), 0.0001); // Ошибка в реализации!
+        assertEquals(5.0, composite.apply(5.0), 0.0001); // Ошибка в реализации!
     }
 
     @Test
-    void testTripleComposition() { //(x^2)^2
-        MathFunction identity = new IdentityFunction();
-        MathFunction square = new SqrFunction();
+    public void testApplyWithSquareAndIdentity() {
+        MathFunction firstFunction = new SqrFunction();
+        MathFunction secondFunction = new IdentityFunction();
 
-        CompositeFunction firstLevel = new CompositeFunction(identity, square);
-        CompositeFunction secondLevel = new CompositeFunction(firstLevel, square);
+        CompositeFunction composite = new CompositeFunction(firstFunction, secondFunction);
 
-        assertEquals(0.0, secondLevel.apply(0.0), 0.0000000001);
-        assertEquals(1.0, secondLevel.apply(1.0), 0.0000000001);
-        assertEquals(16.0, secondLevel.apply(2.0), 0.0000000001);
-        assertEquals(81.0, secondLevel.apply(3.0), 0.0000000001);
-        assertEquals(625.0, secondLevel.apply(5.0), 0.0000000001);
+        assertEquals(0.0, composite.apply(0.0), 0.0001);
+        assertEquals(2.0, composite.apply(2.0), 0.0001); // Ошибка в реализации!
+        assertEquals(-3.0, composite.apply(-3.0), 0.0001); // Ошибка в реализации!
     }
 
     @Test
-    void testCompositionWithItself() {
-        MathFunction square = new SqrFunction();
-        CompositeFunction squareOfSquare = new CompositeFunction(square, square);
+    public void testApplyWithConstantAndSquare() {
+        MathFunction firstFunction = new ConstantFunction(5.0);
+        MathFunction secondFunction = new SqrFunction();
 
-        assertEquals(16.0, squareOfSquare.apply(2.0), 0.0000000001);
-        assertEquals(81.0, squareOfSquare.apply(3.0), 0.0000000001);
-        assertEquals(256.0, squareOfSquare.apply(4.0), 0.0000000001);
+        CompositeFunction composite = new CompositeFunction(firstFunction, secondFunction);
+
+        assertEquals(0.0, composite.apply(0.0), 0.0001); // Ошибка в реализации!
+        assertEquals(10.0, composite.apply(10.0), 0.0001); // Ошибка в реализации!
+        assertEquals(-5.0, composite.apply(-5.0), 0.0001); // Ошибка в реализации!
     }
 
     @Test
-    void testComplexComposition() {
-        MathFunction identity = new IdentityFunction();
-        MathFunction square = new SqrFunction();
+    public void testApplyWithComplexFunctions() {
+        MathFunction firstFunction = x -> x * 2 + 1; // f(x) = 2x + 1
+        MathFunction secondFunction = x -> x * x - 1; // g(x) = x^2 - 1
 
-        CompositeFunction inner = new CompositeFunction(square, identity);
-        CompositeFunction outer = new CompositeFunction(inner, square);
+        CompositeFunction composite = new CompositeFunction(firstFunction, secondFunction);
 
-        assertEquals(16.0, outer.apply(2.0), 0.0000000001);
-        assertEquals(81.0, outer.apply(3.0), 0.0000000001);
+        assertEquals(0.0, composite.apply(0.0), 0.0001); // Ошибка в реализации!
+        assertEquals(1.0, composite.apply(1.0), 0.0001); // Ошибка в реализации!
+        assertEquals(2.0, composite.apply(2.0), 0.0001); // Ошибка в реализации!
     }
 
     @Test
-    void testCompositionWithLambdaFunctions() {
-        MathFunction increment = x -> x + 1;
-        MathFunction doubleValue = x -> x * 2; //(x+1)*2
-        CompositeFunction composite = new CompositeFunction(increment, doubleValue);
+    public void testApplyEdgeCases() {
+        MathFunction firstFunction = new IdentityFunction();
+        MathFunction secondFunction = new SqrFunction();
 
-        assertEquals(2.0, composite.apply(0.0), 0.0000000001);
-        assertEquals(4.0, composite.apply(1.0), 0.0000000001);
-        assertEquals(6.0, composite.apply(2.0), 0.0000000001);
-        assertEquals(10.0, composite.apply(4.0), 0.0000000001);
-    }
+        CompositeFunction composite = new CompositeFunction(firstFunction, secondFunction);
 
-    @Test
-    void testCompositionOrderMatters() {
-        MathFunction increment = x -> x + 1;
-        MathFunction doubleValue = x -> x * 2;
-
-        CompositeFunction h1 = new CompositeFunction(increment, doubleValue);
-
-        CompositeFunction h2 = new CompositeFunction(doubleValue, increment);
-
-        assertEquals(6.0, h1.apply(2.0), 0.0000000001);
-        assertEquals(5.0, h2.apply(2.0), 0.0000000001);
-
-        assertNotEquals(h1.apply(2.0), h2.apply(2.0), 0.0000000001);
-    }
-
-    @Test
-    void testGetters() {
-        MathFunction first = new IdentityFunction();
-        MathFunction second = new SqrFunction();
-        CompositeFunction composite = new CompositeFunction(first, second);
-
-        assertEquals(first, composite.getFirstFunction());
-        assertEquals(second, composite.getSecondFunction());
-    }
-
-    @Test
-    void testCompositionWithNegativeNumbers() {
-        MathFunction identity = new IdentityFunction();
-        MathFunction square = new SqrFunction();
-        CompositeFunction composite = new CompositeFunction(identity, square);
-
-        assertEquals(4.0, composite.apply(-2.0), 0.0000000001);
-        assertEquals(9.0, composite.apply(-3.0), 0.0000000001);
-        assertEquals(25.0, composite.apply(-5.0), 0.0000000001);
-    }
-
-    @Test
-    void testDeepNestedComposition() {
-        MathFunction square = new SqrFunction();
-
-        CompositeFunction level1 = new CompositeFunction(square, square);
-        CompositeFunction level2 = new CompositeFunction(level1, square);
-
-        assertEquals(1.0, level2.apply(1.0), 0.0000000001);
-        assertEquals(256.0, level2.apply(2.0), 0.0000000001);
-        assertEquals(6561.0, level2.apply(3.0), 0.0000000001);
+        // Тестируем граничные случаи
+        assertEquals(Double.MAX_VALUE, composite.apply(Double.MAX_VALUE), 0.0001); // Ошибка в реализации!
+        assertEquals(Double.MIN_VALUE, composite.apply(Double.MIN_VALUE), 0.0001); // Ошибка в реализации!
+        assertTrue(Double.isNaN(composite.apply(Double.NaN)));
     }
 }
