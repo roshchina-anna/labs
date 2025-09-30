@@ -166,10 +166,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     @Override
     public void insert(double x, double y) {
         if (head == null) {
-            addNode(x, y);
+            addNode(x, y); //создаем первый узел
             return;
         }
-        Node current = head;
+        Node current = head; //начинаем с головы списка
         for (int i = 0; i < count; i++) {
             if (Math.abs(current.x - x) < 1e-12) {
                 current.y = y;
@@ -177,7 +177,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             }
             current = current.next;
         }
-        Node newNode = new Node(x, y);
+        Node newNode = new Node(x, y); //создаем новый узел для вставки
         if (x < head.x) {
             Node last = head.prev;
             newNode.next = head;
@@ -188,7 +188,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             count++;
             return;
         }
-        current = head;
+        current = head; //начинаем с головы
         for (int i = 0; i < count; i++) {
             if (x < current.x) {
                 Node prev = current.prev;
@@ -201,7 +201,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             }
             current = current.next;
         }
-        Node last = head.prev;
+        Node last = head.prev; //получаем последний узел
         newNode.next = head;
         newNode.prev = last;
         last.next = newNode;
