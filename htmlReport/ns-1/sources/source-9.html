@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SplineFunction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">ru.ssau.tk.roshchina.labs.functions</a>
+</div>
+
+<h1>Coverage Summary for Class: SplineFunction (ru.ssau.tk.roshchina.labs.functions)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SplineFunction</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package ru.ssau.tk.roshchina.labs.functions;
+&nbsp;
+&nbsp;public class SplineFunction implements MathFunction {
+&nbsp;    private final double[] xArray;
+&nbsp;    private final double[] yArray;
+<b class="nc">&nbsp;    public SplineFunction(double[] xArray, double[] yArray) {</b>
+<b class="nc">&nbsp;        if (xArray.length != yArray.length || xArray.length &lt; 2) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Invalid arrays&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        for (int i = 1; i &lt; xArray.length; i++) {</b>
+<b class="nc">&nbsp;            if (xArray[i] &lt;= xArray[i - 1]) {</b>
+<b class="nc">&nbsp;                throw new IllegalArgumentException(&quot;xArray must be strictly increasing&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;        //создание копий массивов
+<b class="nc">&nbsp;        this.xArray = xArray.clone();</b>
+<b class="nc">&nbsp;        this.yArray = yArray.clone();</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public double apply(double x) {
+<b class="nc">&nbsp;        for (int i = 0; i &lt; xArray.length - 1; i++) {</b>
+<b class="nc">&nbsp;            if (x &lt;= xArray[i + 1]) {</b>
+<b class="nc">&nbsp;                if (x &lt; xArray[i] &amp;&amp; i == 0) {</b>
+&nbsp;                    //экстаполяция влево, если х лежит слева от первого узла
+<b class="nc">&nbsp;                    return interpolate(xArray[0], xArray[1], yArray[0], yArray[1], x);</b>
+&nbsp;                }
+&nbsp;                //интерполяция внутри найденного интервала
+<b class="nc">&nbsp;                return interpolate(xArray[i], xArray[i + 1], yArray[i], yArray[i + 1], x);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;        //интерполяция вправо, если х лежит справа от последнего узла
+<b class="nc">&nbsp;        return interpolate(</b>
+&nbsp;                xArray[xArray.length - 2],
+&nbsp;                xArray[xArray.length - 1],
+&nbsp;                yArray[yArray.length - 2],
+&nbsp;                yArray[yArray.length - 1],
+&nbsp;                x
+&nbsp;        );
+&nbsp;    }
+&nbsp;    //выполнение линейной интерполяции между двумя точками
+&nbsp;    private double interpolate(double x1, double x2, double y1, double y2, double x) {
+<b class="nc">&nbsp;        return y1 + (y2 - y1) * (x - x1) / (x2 - x1);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-05 23:19</div>
+</div>
+</body>
+</html>

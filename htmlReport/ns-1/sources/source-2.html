@@ -1,0 +1,284 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ArrayTabulatedFunction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">ru.ssau.tk.roshchina.labs.functions</a>
+</div>
+
+<h1>Coverage Summary for Class: ArrayTabulatedFunction (ru.ssau.tk.roshchina.labs.functions)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArrayTabulatedFunction</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/81)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package ru.ssau.tk.roshchina.labs.functions;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
+&nbsp;    private double[] xArray;
+&nbsp;    private double[] yArray;
+&nbsp;    private int count;
+&nbsp;
+<b class="nc">&nbsp;    public ArrayTabulatedFunction(double[] xArray, double[] yArray) {</b>
+<b class="nc">&nbsp;        this.count = xArray.length;</b>
+<b class="nc">&nbsp;        this.xArray = Arrays.copyOf(xArray, count);</b>
+<b class="nc">&nbsp;        this.yArray = Arrays.copyOf(yArray, count);</b>
+&nbsp;    }
+<b class="nc">&nbsp;    public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {</b>
+<b class="nc">&nbsp;        this.count = count;</b>
+<b class="nc">&nbsp;        this.xArray = new double[count];</b>
+<b class="nc">&nbsp;        this.yArray = new double[count];</b>
+<b class="nc">&nbsp;        if (xFrom &gt; xTo) {</b>
+&nbsp;            //меняем местами начальную точку и конечную
+<b class="nc">&nbsp;            double temp = xFrom;</b>
+<b class="nc">&nbsp;            xFrom = xTo;</b>
+<b class="nc">&nbsp;            xTo = temp;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (xFrom == xTo) {</b>
+&nbsp;            //заполняем все х одним значением
+<b class="nc">&nbsp;            Arrays.fill(xArray, xFrom);</b>
+<b class="nc">&nbsp;            double yArrays = source.apply(xFrom);</b>
+&nbsp;            //заполняем все у одним значением
+<b class="nc">&nbsp;            Arrays.fill(yArray, yArrays);</b>
+&nbsp;        } else {
+&nbsp;            //иначе выполняем дискретизацию
+<b class="nc">&nbsp;            double step = (xTo - xFrom) / (count - 1);</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; count; i++) {</b>
+<b class="nc">&nbsp;                xArray[i] = xFrom + i * step;</b>
+<b class="nc">&nbsp;                yArray[i] = source.apply(xArray[i]);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public int getCount() {
+<b class="nc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public double getX(int index) {
+<b class="nc">&nbsp;        return xArray[index];</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public double getY(int index) {
+<b class="nc">&nbsp;        return yArray[index];</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public void setY(int index, double value) {
+<b class="nc">&nbsp;        yArray[index] = value;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public int indexOfX(double x) {
+<b class="nc">&nbsp;        for (int i = 0; i &lt; count; i++) {</b>
+<b class="nc">&nbsp;            if (Math.abs(getX(i) - x) &lt; 1e-12) {</b>
+<b class="nc">&nbsp;                return i;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return -1;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public int indexOfY(double y) {
+<b class="nc">&nbsp;        for (int i = 0; i &lt; count; i++) {</b>
+<b class="nc">&nbsp;            if (Math.abs(getY(i) - y) &lt; 1e-12) {</b>
+<b class="nc">&nbsp;                return i;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return -1;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public double leftBound() {
+<b class="nc">&nbsp;        return getX(0);</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public double rightBound() {
+<b class="nc">&nbsp;        return getX(count - 1);</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    protected int floorIndexOfX(double x) { //поиск левой границы для интервала х
+<b class="nc">&nbsp;        if (x &lt; getX(0)) return 0;</b>
+<b class="nc">&nbsp;        if (x &gt; getX(count - 1))return count;</b>
+&nbsp;        //бинарный поиск интервала
+<b class="nc">&nbsp;        int left = 0;</b>
+<b class="nc">&nbsp;        int right = count - 1;</b>
+<b class="nc">&nbsp;        while (left &lt;= right) {</b>
+<b class="nc">&nbsp;            int mid = left + (right - left) / 2; //находим средний индекс</b>
+<b class="nc">&nbsp;            if (getX(mid) == x) {</b>
+<b class="nc">&nbsp;                return mid;</b>
+<b class="nc">&nbsp;            } else if (getX(mid) &lt; x){</b>
+<b class="nc">&nbsp;                left = mid + 1;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                right = mid - 1;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return right;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    protected double extrapolateLeft(double x) {
+<b class="nc">&nbsp;        if (count == 1) {</b>
+<b class="nc">&nbsp;            return getY(0);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return interpolate(x, getX(0), getX(1), getY(0), getY(1));</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    protected double extrapolateRight(double x) {
+<b class="nc">&nbsp;        if (count == 1) {</b>
+<b class="nc">&nbsp;            return getY(0);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return interpolate(x, getX(count - 2), getX(count - 1), getY(count - 2), getY(count - 1));</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    protected double interpolate(double x, int floorIndex) {
+<b class="nc">&nbsp;        if (count == 1) {</b>
+<b class="nc">&nbsp;            return getY(0);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return interpolate(x, getX(floorIndex), getX(floorIndex+1), getY(floorIndex), getY(floorIndex+1));</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public void insert(double x, double y) {
+<b class="nc">&nbsp;        for (int i = 0; i &lt; count; i++) { //поиск х</b>
+<b class="nc">&nbsp;            if (xArray[i] == x) {</b>
+<b class="nc">&nbsp;                yArray[i] = y; //замена значения</b>
+&nbsp;                return;
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        int insertIndex = 0; //поиск позиции для вставки</b>
+<b class="nc">&nbsp;        while (insertIndex &lt; count &amp;&amp; xArray[insertIndex] &lt; x) {</b>
+<b class="nc">&nbsp;            insertIndex++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        double[] newXValues = new double[count + 1]; //создание увеличенных массивов</b>
+<b class="nc">&nbsp;        double[] newYValues = new double[count + 1];</b>
+&nbsp;
+<b class="nc">&nbsp;        System.arraycopy(xArray, 0, newXValues, 0, insertIndex); //копирование эл-тов до позиции вставки</b>
+<b class="nc">&nbsp;        System.arraycopy(yArray, 0, newYValues, 0, insertIndex);</b>
+&nbsp;
+<b class="nc">&nbsp;        newXValues[insertIndex] = x; //втавка нового элемента</b>
+<b class="nc">&nbsp;        newYValues[insertIndex] = y;</b>
+&nbsp;
+<b class="nc">&nbsp;        System.arraycopy(xArray, insertIndex, newXValues, insertIndex + 1, count - insertIndex); //копирование эл-тов после поиции вставки</b>
+<b class="nc">&nbsp;        System.arraycopy(yArray, insertIndex, newYValues, insertIndex + 1, count - insertIndex);</b>
+&nbsp;
+<b class="nc">&nbsp;        xArray = newXValues; //замена старых массивов</b>
+<b class="nc">&nbsp;        yArray = newYValues;</b>
+<b class="nc">&nbsp;        count++;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public void remove(int index) {
+&nbsp;        //новые массивы уменьшенного размера
+<b class="nc">&nbsp;        double[] newXArray = new double[count - 1];</b>
+<b class="nc">&nbsp;        double[] newYArray = new double[count - 1];</b>
+&nbsp;
+&nbsp;        //копирует левую часть до удаляемого элемента
+<b class="nc">&nbsp;        System.arraycopy(xArray, 0, newXArray, 0, index);</b>
+<b class="nc">&nbsp;        System.arraycopy(yArray, 0, newYArray, 0, index);</b>
+&nbsp;
+&nbsp;        //копирует правую часть до удаляемого элемента
+<b class="nc">&nbsp;        System.arraycopy(xArray, index + 1, newXArray, index, count - index - 1);</b>
+<b class="nc">&nbsp;        System.arraycopy(yArray, index + 1, newYArray, index, count - index - 1);</b>
+<b class="nc">&nbsp;        this.xArray = newXArray; //заменяет старые массивы на новые</b>
+<b class="nc">&nbsp;        this.yArray = newYArray;</b>
+<b class="nc">&nbsp;        this.count--;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-05 23:19</div>
+</div>
+</body>
+</html>
