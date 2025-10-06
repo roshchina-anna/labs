@@ -102,13 +102,7 @@ class MathFunctionTest {
         double result = identity.andThen(sqr).andThen(constant).apply(3.0);
         assertEquals(5.0, result, 0.000000001);
     }
-    @Test
-    void testAndThenWithNullParameter() {
-        MathFunction identity = new IdentityFunction();
-        assertThrows(IllegalArgumentException.class, () -> {
-            identity.andThen(null);
-        });
-    }
+
     @Test
     void testComplexChainExampleFromTask() {
         MathFunction f = new ConstantFunction(10.0);

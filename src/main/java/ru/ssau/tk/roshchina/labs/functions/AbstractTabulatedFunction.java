@@ -7,7 +7,7 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
     protected abstract double interpolate(double x, int indexLeft);
     //интерполяция между двумя точками
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) {
-        if (leftX == rightX){
+        if (Math.abs (leftX - rightX) < 1e-12){
             throw new IllegalArgumentException ("The left and right boundaries of the interval cannot be the same");
         }
         return leftY + (rightY - leftY) * (x - leftX) / (rightX - leftX);

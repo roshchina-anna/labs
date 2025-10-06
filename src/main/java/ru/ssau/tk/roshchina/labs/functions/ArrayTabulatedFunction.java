@@ -122,7 +122,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     @Override
     public void insert(double x, double y) {
         for (int i = 0; i < count; i++) { //поиск х
-            if (xArray[i] == x) {
+            if (Math.abs (xArray[i] - x) < 1e-12) {
                 yArray[i] = y; //замена значения
                 return;
             }
